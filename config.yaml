@@ -1,0 +1,21 @@
+---
+id: tokyodebian-debbugs-soap-20170520
+base_name: debbugs-soap
+tags:
+- rabbit
+- debbugs
+presentation_date: 
+version: 1.0.0
+licenses: []
+slideshare_id: 
+speaker_deck_id: 
+ustream_id: 
+vimeo_id: 
+youtube_id: 
+author:
+  markup_language: :rd
+  name: Kentaro Hayashi
+  email: kenhys@gmail.com
+  rubygems_user: kenhys
+  slideshare_user: 
+  speaker_deck_user: 
