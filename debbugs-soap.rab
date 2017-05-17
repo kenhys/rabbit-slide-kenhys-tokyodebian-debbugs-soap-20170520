@@ -129,3 +129,90 @@
 * ♔: blocks
 * ☣: affects
 * ☺: fixed
+
+= なぜDebbugsに興味を?
+
+* Zulipのbotにdebbugsをサポートさせたい
+  * https://zulip.org/
+  * https://github.com/okkez/pragmatic-bot
+* バグ報告のURLを貼り付けたらbotに処理させたい
+
+= botに処理させるには？
+
+* bugs.d.oをスクレイピング？
+* もっといいやりかたはない？
+
+= SOAP!
+
+* https://wiki.debian.org/DebbugsSoapInterface
+
+= サンプルコードもあるよ
+
+    require 'soap/rpc/driver'
+
+    host = "bugs.debian.org"
+    port = 80
+    server="http://#{host}:#{port}/cgi-bin/soap.cgi"
+    ns = 'Debbugs/SOAP/'
+    drv = SOAP::RPC::Driver.new(server, ns)
+    drv.wiredump_dev = STDOUT if $DEBUG
+    drv.add_method('get_status','bugnumber')
+    drv.add_method('get_bugs','keyparam')
+
+    p drv.get_status(drv.get_bugs(['package', 'pbuilder', 'severity', 'wishlist']))
+
+* Ruby 1.8じゃないと(多分)動かないけどな！
+
+= Rubyの事情
+
+* soap4rはもともとRuby 1.8にバンドル
+* Ruby 1.9ではバンドルされなくなった
+* soap4rはメンテされなくなった
+* 雨後の筍 soap4r
+
+= 雨後の筍 soap4r
+
+* soap4r (1.5.8)
+* soap4r-ng (2.0.3)
+* soap4r-r19 (1.5.9)
+* soap4r-ruby1.9 (2.0.5)
+* soap4r-ruby19 (1.5.9)
+
+= soapXr
+
+* soap2r (1.5.8)
+* soap4r (1.5.8)
+* soap5r (2.0.3)
+
+= upstream on Debian
+
+* ruby-soap4r
+  * https://github.com/noeticpenguin/soap4r-noeticpenguin
+
+= 混沌とした世界
+
+* あまり踏み込まないほうがよい予感
+
+= SOAPを使うには
+
+* ポイント:WSDL
+
+= WSDL
+
+* Webサービス記述言語
+* XMLでインターフェースを定義する
+
+= DebbugsのWSDL
+
+* https://wiki.debian.org/DebbugsSoapInterface
+* 一切言及はない、繰り返す一切言及はない
+* ((*どうなってるの？*))
+
+= Google先生に聞いてみよう
+
+* Emacs使いはdebbugs.el
+* http://git.savannah.gnu.org/gitweb/?p=emacs/elpa.git;a=blob_plain;f=packages/debbugs/Debbugs.wsdl;hb=HEAD"
+
+
+
+
