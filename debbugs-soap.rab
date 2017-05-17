@@ -1,4 +1,4 @@
-= Debbugsとの\n付き合い方
+= Debbugsとの\nつきあいかた
 
 : subtitle
   SOAP編
@@ -15,14 +15,117 @@
 : theme
   .
 
-= 最初のスライド
-
-  * 項目1
-  * 項目2
-  * 項目3
-
-= 二番目のスライド
+= 自己紹介(1)
 
   # image
-  # src = https://raw.github.com/rabbit-shocker/rabbit/master/sample/lavie.png
-  # relative_height = 100
+  # relative-height = 40
+  # src = https://pbs.twimg.com/profile_images/2290018079/cvcy12slbeva80jboxzf_400x400.png
+
+* Twitter/GitHub: @kenhys
+* 所属: ((*トラックポイント・ソフトドーム派*))
+
+= 自己紹介(2)
+
+  # image
+  # relative-height = 60
+  # src = images/track-points.png
+
+* トラックポイント・ソフトドーム派
+
+= 参考画像の出典
+
+  # image
+  # relative-height = 80
+  # src = images/irasutoya.png
+
+* http://www.irasutoya.com/
+
+= パッケージ関連の活動
+
+* groonga (全文検索エンジン)
+* groonga-normalizer-mysql
+* libhinawa
+* fcitx-imlist
+* hal-flash (Flashを延命させるアレ)
+* growl-for-linux
+
+= 閑話休題
+
+(('tag:center'))
+そろそろ本題に
+
+= 本日の話題
+
+* Debbugsとのつきあいかた:SOAP編
+
+= 本日の話題
+
+* Debbugsとのつきあいかた((*:SOAP編*))
+
+= 話さないこと
+
+* Debbugsのふつうの使い方
+
+= Debbugsとは？
+
+* 1994年 Ian Jackson氏が開発を始めた\n
+  Issueトラッキングシステム
+* GNOMEやKDEもかつて採用していた\n
+  →Bugzillaへ移行した
+
+= Debbugsとは？
+
+  # image
+  # relative-height = 100
+  # src = images/debbugs-debbugs.png
+
+= ふつうの人のバグ報告(1)
+
+  # image
+  # relative-height = 80
+  # src = images/reportbug.png
+
+* Reportbug!
+
+= ふつうの人のバグ報告(2)
+
+  # image
+  # relative-height = 80
+  # src = images/reportbug-ng.png
+
+* Reportbug-NG!
+
+= Debbugsのよいところ
+
+* メールで気軽にバグ報告
+* 報告にログインとか不要
+* 一見さんをカジュアルに殺せる初見殺し機能搭載
+
+= Debbugsの見方
+
+  # image
+  # relative-height = 80
+  # src = images/debbugs-status.png
+
+* [重要度|タグ|状態]
+
+= Debbugsの重要度
+
+* m: minor
+* w: wishlist
+* n: normal
+* S: serious
+* G: grave
+
+= Debbugsのタグ
+
+* +: patch
+* ☹: wontfix
+* M: moreinfo
+* P: pending
+
+= Debbugsの状態
+
+* ♔: blocks
+* ☣: affects
+* ☺: fixed
