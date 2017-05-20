@@ -362,3 +362,8 @@
     807406:pending:pbuilder: drop all the 'xenial' (...)
     837812:pending:[pbuilder] New hook improving dpkgi
     
+= まとめ
+
+* debbugsにはSOAPインターフェースがある
+* Debbug.wsdlはdebbugs.el方面から入手せよ
+* Rubyから使うならsoap4r(修正版) or savonを使え
