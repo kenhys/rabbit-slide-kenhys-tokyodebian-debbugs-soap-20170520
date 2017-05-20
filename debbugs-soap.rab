@@ -316,3 +316,49 @@
         <wsdlsoap:address location="http://bugs.debian.org/cgi-bin/soap.cgi"/>
       </wsdl:port>
     </wsdl:service>
+
+= 実践:debbugs
+
+* 実際にSOAPでやりとりしてみるには
+
+= 何を使う？
+
+* savon
+  * http://savonrb.com/
+  * RubyのSOAP clientライブラリー
+
+= savonの使い方
+
+* require "savon"
+* WSDLからクライアントのインスタンス作成
+* callでdebbugsのメソッドを呼ぶ
+* レスポンスを表示する
+
+= savonクライアント
+
+    client = Savon.client(wsdl: "(WSDLのURL)",
+                          endpoint: "http://bugs.debian.org/cgi-bin/soap.cgi",
+                          namespace: "Debbugs/SOAP")
+
+* クライアント作成
+
+= メソッドを呼ぶ
+
+    # fetch status of pbuilder specific bugs
+    response = client.call(:get_status) do
+      message(bugs: ["807406", "837812"])
+    end
+    
+* 例: get_statusメソッドを呼ぶ
+
+= レスポンスを表示する
+
+    bugs = response.body[:get_status_response][:s_gensym3][:item]
+    bugs.each do |bug|
+      item = bug[:value]
+      puts "#{bug[:key]}:#{item[:pending]}:#{item[:subject]}"
+    end
+    #=> 
+    807406:pending:pbuilder: drop all the 'xenial' (...)
+    837812:pending:[pbuilder] New hook improving dpkgi
+    
