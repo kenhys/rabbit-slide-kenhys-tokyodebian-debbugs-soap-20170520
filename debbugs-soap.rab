@@ -173,7 +173,6 @@
 
 = 雨後の筍 soap4r
 
-* soap4r (1.5.8) オリジナル
 * soap4r-ng (2.0.3)
 * soap4r-r19 (1.5.9) Ruby1.9対応版
 * soap4r-ruby1.9 (2.0.5) Ruby1.9対応版
@@ -181,7 +180,6 @@
 
 = soapXr
 
-* soap4r (1.5.8) オリジナル
 * soap2r (1.5.8) soap4rの後にリリース
 * soap5r (2.0.3)
 
