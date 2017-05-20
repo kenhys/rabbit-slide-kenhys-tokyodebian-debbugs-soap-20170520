@@ -68,16 +68,16 @@
 
 = Debbugsとは？
 
+  # image
+  # relative-height = 100
+  # src = images/debbugs-debbugs.png
+
+= Debbugsとは？
+
 * 1994年 Ian Jackson氏が開発を始めた\n
   Issueトラッキングシステム
 * GNOMEやKDEもかつて採用していた\n
   →Bugzillaへ移行した
-
-= Debbugsとは？
-
-  # image
-  # relative-height = 100
-  # src = images/debbugs-debbugs.png
 
 = ふつうの人のバグ報告(1)
 
@@ -132,8 +132,9 @@
 
 = なぜDebbugsに興味を?
 
-* Zulipのbotにdebbugsをサポートさせたい
+* 社内のグループチャットがZulip
   * https://zulip.org/
+* Zulipのbotにdebbugsをサポートさせたい
   * https://github.com/okkez/pragmatic-bot
 * バグ報告のURLを貼り付けたらbotに処理させたい
 
@@ -161,7 +162,7 @@
 
     p drv.get_status(drv.get_bugs(['package', 'pbuilder', 'severity', 'wishlist']))
 
-* Ruby 1.8じゃないと(多分)動かないけどな！
+* Ruby 1.8 or ((*修正済みsoap4r*))じゃないと動かない
 
 = Rubyの事情
 
@@ -172,16 +173,16 @@
 
 = 雨後の筍 soap4r
 
-* soap4r (1.5.8)
+* soap4r (1.5.8) オリジナル
 * soap4r-ng (2.0.3)
-* soap4r-r19 (1.5.9)
-* soap4r-ruby1.9 (2.0.5)
-* soap4r-ruby19 (1.5.9)
+* soap4r-r19 (1.5.9) Ruby1.9対応版
+* soap4r-ruby1.9 (2.0.5) Ruby1.9対応版
+* soap4r-ruby19 (1.5.9) Ruby1.9対応版
 
 = soapXr
 
-* soap2r (1.5.8)
-* soap4r (1.5.8)
+* soap4r (1.5.8) オリジナル
+* soap2r (1.5.8) soap4rの後にリリース
 * soap5r (2.0.3)
 
 = upstream on Debian
@@ -199,20 +200,119 @@
 
 = WSDL
 
-* Webサービス記述言語
-* XMLでインターフェースを定義する
+* Web Services Description Language
+  * Webサービス記述言語
+  * XMLでインターフェースを定義する
+  * WSDLを元にSOAPで通信
 
 = DebbugsのWSDL
 
 * https://wiki.debian.org/DebbugsSoapInterface
-* 一切言及はない、繰り返す一切言及はない
-* ((*どうなってるの？*))
+* ((*一切言及はない*))
+* どうなってるの？
 
-= Google先生に聞いてみよう
+= WSDLを探せ
+
+  # image
+  # relative-height = 70
+  # src = images/debbugs-wsdl-found.png
 
 * Emacs使いはdebbugs.el
-* http://git.savannah.gnu.org/gitweb/?p=emacs/elpa.git;a=blob_plain;f=packages/debbugs/Debbugs.wsdl;hb=HEAD"
+  * https://elpa.gnu.org/packages/debbugs.html
+
+= Debbugs.wsdl
+
+* Debbugs用のWSDL
+* debian.orgとgnu.orgのdebbugsで使える
+
+= WSDLの構造
+
+* <wsdl:definitions>の子要素として定義
+  * <wsdl:types>
+  * <wsdl:message>
+  * <wsdl:portType>
+  * <wsdl:binding>
+  * <wsdl:service>
+
+= <wsdl:types>
 
 
+   <complexType name="ArrayOfBugNumber">
+     <complexContent>
+       <restriction base="soapenc:Array">
+         <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:int[]"/>
+       </restriction>
+     </complexContent>
+   </complexType>
 
+* データ型の定義をする
+  * 例:バグ番号の配列を定義
 
+= <wsdl:message>
+
+    <wsdl:message name="get_statusRequest">
+      <wsdl:part name="bugs" type="types:ArrayOfBugNumber"/>
+    </wsdl:message>
+    <wsdl:message name="get_statusResponse">
+      <wsdl:part name="s-gensym3" type="apachens:Map"/>
+    </wsdl:message>
+
+* データの抽象的な定義
+  * 例:ステータス取得時にやりとりするデータの定義
+
+= <wsdl:portType>
+
+* 操作の定義 <wsl:operation>を含む
+
+    <wsdl:portType name="Debbugs/SOAP">
+      <wsdl:operation name="get_status" parameterOrder="bugs">
+        ...
+      </wsdl:operation>
+      <wsdl:operation name="get_bug_log" parameterOrder="bugnumber">
+        ...
+      </wsdl:operation>
+    </wsdl:portType>
+
+= <wsdl:operation>
+
+    <wsdl:operation name="get_status" parameterOrder="bugs">
+      <wsdl:input message="tns:get_statusRequest">
+        <soap:body
+              encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+              namespace="urn:Debbugs/SOAP"
+              use="encoded"/>
+      </wsdl:input>
+      <wsdl:output message="tns:get_statusResponse">
+        <soap:body
+              encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+              namespace="urn:Debbugs/SOAP"
+              use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+* 操作の入出力を定義
+  * 例:ステータス取得時の入出力を定義
+
+= <wsdl:binding>
+
+* portTypeで定義した操作のプロトコルを指定
+
+    <wsdl:binding name="Debbugs/SOAP/BINDING" type="tns:Debbugs/SOAP">
+      <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="get_status">
+        ...
+      </wsdl:operation>
+    </wsdl:binding>
+
+= <wsdl:service>
+
+* 通信先を定義
+
+    <wsdl:service name="Debbugs/SOAP/SERVICE">
+      <wsdl:port binding="tns:Debbugs/SOAP/BINDING" name="gnu.org">
+        <wsdlsoap:address location="http://debbugs.gnu.org/cgi/soap.cgi"/>
+      </wsdl:port>
+      <wsdl:port binding="tns:Debbugs/SOAP/BINDING" name="debian.org">
+        <wsdlsoap:address location="http://bugs.debian.org/cgi-bin/soap.cgi"/>
+      </wsdl:port>
+    </wsdl:service>
